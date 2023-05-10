@@ -54,9 +54,13 @@ main {
 }
 
 .box {
+  font-family: Roboto;
   border: 3px solid black;
   cursor: pointer;
   transition: all 0.4s;
+  font-size: 6em;
+  text-align: center;
+  line-height: 160px;
 }
 
 .box:hover {
