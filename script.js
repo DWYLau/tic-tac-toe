@@ -28,7 +28,6 @@ const gameboard = (() => {
       board[index].innerHTML = currentPlayer;
     }
     changePlayer(gameState);
-    console.log(board);
     console.log(gameState);
     checkWin(gameState);
   }
@@ -44,6 +43,7 @@ const gameboard = (() => {
   }
 
   function checkWin(gameStateArray) {
+    let [a, b, c] = [0, 0, 0];
     const winCombos = [
       [0, 1, 2],
       [3, 4, 5],
@@ -56,9 +56,7 @@ const gameboard = (() => {
     ];
 
     winCombos.forEach((combo) => {
-      console.log(combo);
-      console.log(combo[0]);
-      console.log(gameStateArray);
+      [a, b, c] = combo;
     });
   }
   drawMark();
