@@ -67,7 +67,7 @@ main {
   background-color: grey;
 }
 
-.winning-message {
+.display-message {
   font-family: Roboto;
   position: fixed;
   top: 0;
@@ -81,7 +81,7 @@ main {
   align-items: center;
 }
 
-.winning-message h1 {
+.display-message h1 {
   color: white;
   font-size: 5em;
 }
