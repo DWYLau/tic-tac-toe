@@ -28,7 +28,6 @@ const gameboard = (() => {
       board[index].innerHTML = currentPlayer;
     }
     changePlayer(gameState);
-    console.log(gameState);
     checkWin(gameState);
   }
 
@@ -93,6 +92,24 @@ const gameboard = (() => {
     }
   }
 
-  function restartGame() {}
+  function restartGame() {
+    let restartBtn = document.querySelector(".restart");
+    let afterMessage = document.querySelector(".display-message");
+    restartBtn.addEventListener("click", function () {
+      gameState = ["", "", "", "", "", "", "", "", ""];
+      countX = 0;
+      countO = 0;
+      currentPlayer = playerOne.mark;
+      afterMessage.classList.remove("show-message");
+      removeMark();
+    });
+  }
+
+  function removeMark() {
+    board.forEach((box) => {
+      box.innerHTML = "";
+    });
+  }
   drawMark();
+  restartGame();
 })();
