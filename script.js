@@ -1,10 +1,10 @@
-// factory function
+// factory function to create player objects
 
 const Player = function (mark) {
   return { mark };
 };
 
-// module
+// module for game
 
 const gameboard = (() => {
   const board = Array.from(document.querySelectorAll(".box"));
@@ -82,6 +82,7 @@ const gameboard = (() => {
       roundsPlayed = 0;
       currentPlayer = playerOne.mark;
       displayController.removeMessage();
+      displayController.playerTurn.textContent = "Get 3 Xs in a row to win!";
       board.forEach((box) => {
         box.innerHTML = "";
       });
