@@ -11,9 +11,8 @@ const gameboard = (() => {
   let gameState = ["", "", "", "", "", "", "", "", ""];
   const playerOne = Player("X");
   const playerTwo = Player("O");
-  let countX = 0;
-  let countO = 0;
   let currentPlayer = playerOne.mark;
+  let roundsPlayed = 0;
 
   function drawMark() {
     board.forEach((box) => {
@@ -23,29 +22,34 @@ const gameboard = (() => {
 
   function clickedBox(event) {
     let index = event.target.getAttribute("data-index");
-    if (gameState[index] === "") {
+    if (gameState[index] === "" && roundsPlayed < 9) {
       gameState[index] = currentPlayer;
       board[index].innerHTML = currentPlayer;
+      if (checkWin() == true) {
+        roundsPlayed = 10;
+        displayController.winMessage(currentPlayer);
+      }
     }
-    changePlayer(gameState);
-    checkWin(gameState);
+    roundsPlayed++;
+    changePlayer();
+    if (roundsPlayed === 9) {
+      displayController.drawMessage();
+    }
   }
 
-  function changePlayer(stateArray) {
-    let message = document.querySelector(".player-turn");
-    countX = stateArray.filter((mark) => mark === playerOne.mark).length;
-    countO = stateArray.filter((mark) => mark === playerTwo.mark).length;
+  function changePlayer() {
+    let countX = gameState.filter((mark) => mark === playerOne.mark).length;
+    let countO = gameState.filter((mark) => mark === playerTwo.mark).length;
     if (countX > countO) {
       currentPlayer = playerTwo.mark;
-      message.textContent = "Player O's turn!";
+      displayController.playerTurn.textContent = "Player O's turn!";
     } else {
       currentPlayer = playerOne.mark;
-      message.textContent = "Player X's turn!";
+      displayController.playerTurn.textContent = "Player X's turn!";
     }
-    return countX, countO;
   }
 
-  function checkWin(gameStateArray) {
+  function checkWin() {
     const winCombos = [
       [0, 1, 2],
       [3, 4, 5],
@@ -61,55 +65,58 @@ const gameboard = (() => {
       let [a, b, c] = combo;
 
       if (
-        gameStateArray[a] &&
-        gameStateArray[a] == gameStateArray[b] &&
-        gameStateArray[b] == gameStateArray[c]
+        gameState[a] &&
+        gameState[a] == gameState[b] &&
+        gameState[b] == gameState[c]
       ) {
-        winloseMessage();
-      } else {
-        tieMessage();
+        return true;
       }
     }
-  }
-
-  function winloseMessage() {
-    let afterMessage = document.querySelector(".display-message");
-    let winningMessage = document.querySelector(".winning-message");
-    if (countX > countO) {
-      afterMessage.classList.add("show-message");
-    } else {
-      afterMessage.classList.add("show-message");
-      winningMessage.textContent = "Congratulations! 0 wins!";
-    }
-  }
-
-  function tieMessage() {
-    let afterMessage = document.querySelector(".display-message");
-    let winningMessage = document.querySelector(".winning-message");
-    if (countX === 5 && countO === 4) {
-      afterMessage.classList.add("show-message");
-      winningMessage.textContent = "Tie! Play again!";
-    }
+    return false;
   }
 
   function restartGame() {
     let restartBtn = document.querySelector(".restart");
-    let afterMessage = document.querySelector(".display-message");
     restartBtn.addEventListener("click", function () {
       gameState = ["", "", "", "", "", "", "", "", ""];
-      countX = 0;
-      countO = 0;
+      roundsPlayed = 0;
       currentPlayer = playerOne.mark;
-      afterMessage.classList.remove("show-message");
-      removeMark();
+      displayController.removeMessage();
+      board.forEach((box) => {
+        box.innerHTML = "";
+      });
     });
   }
 
-  function removeMark() {
-    board.forEach((box) => {
-      box.innerHTML = "";
-    });
-  }
   drawMark();
   restartGame();
+})();
+
+// module for messages
+
+const displayController = (() => {
+  let afterMessage = document.querySelector(".display-message");
+  let winnerMessage = document.querySelector(".winning-message");
+  let playerTurn = document.querySelector(".player-turn");
+
+  function winMessage(winner) {
+    afterMessage.classList.add("show-message");
+    winnerMessage.textContent = `Congratulations! ${winner} has won!`;
+  }
+
+  function drawMessage() {
+    afterMessage.classList.add("show-message");
+    winnerMessage.textContent = "It's a tie! Play again!";
+  }
+
+  function removeMessage() {
+    afterMessage.classList.remove("show-message");
+  }
+
+  return {
+    playerTurn,
+    winMessage,
+    drawMessage,
+    removeMessage,
+  };
 })();
