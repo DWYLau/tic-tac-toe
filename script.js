@@ -14,7 +14,7 @@ const gameboard = (() => {
   let currentPlayer = playerOne.mark;
   let roundsPlayed = 0;
 
-  function drawMark() {
+  function startGame() {
     board.forEach((box) => {
       box.addEventListener("click", clickedBox);
     });
@@ -89,7 +89,7 @@ const gameboard = (() => {
     });
   }
 
-  drawMark();
+  startGame();
   restartGame();
 })();
 
