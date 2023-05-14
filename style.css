@@ -106,3 +106,9 @@ main {
 .show-message {
   display: flex;
 }
+
+@media (-webkit-device-pixel-ratio: 1.25) {
+  * {
+    zoom: 0.8;
+  }
+}
